@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-//import logo from './logo.svg';
+import { TodoBanner } from "./TodoBanner";
+import { TodoCreator } from "./TodoCreator";
+import { TodoRow } from "./TodoRow";
 import './App.css';
 
 export default class App extends Component {
@@ -12,7 +14,7 @@ export default class App extends Component {
         {action: "Dodać RWD aplikacji", done: false},
         {action: "Dodać nową funkcjonalność do bieżącej aplikacji"}
       ],
-      newItemText: ""
+      
     }
   }
 
@@ -20,11 +22,11 @@ export default class App extends Component {
     this.setState({newItemText: event.target.value});
   }
 
-  createNewTodo = () => {
-    if (!this.state.todoItems.find(item => item.action === this.state.newItemText)) {
+  createNewTodo = (task) => {
+    if (!this.state.todoItems.find(item => item.action === task)) {
       this.setState({
-        todoItems: [...this.state.todoItems, {action: this.state.newItemText, done: false}],
-        newItemText: ""
+        todoItems: [...this.state.todoItems, {action: task, done: false}],
+        
       });
     }
   }
@@ -35,35 +37,22 @@ export default class App extends Component {
   });
 
   todoTableRows = () => this.state.todoItems.map(item => 
-    <tr key={item.action}>
-      <td>{item.action}</td>
-      <td>
-        <input type="checkbox" checked={item.done}
-          onChange={() => this.toggleTodo(item)} />
-      </td>
-    </tr>)
-
+    <TodoRow key={item.action} item={item} callback={this.toggleTodo} />)
+  
   render() {
     return (
       <div>
-        <h4 className="task-list">
-          Lista zadań użytkownika { this.state.userName }
-          (Liczba zadań: {this.state.todoItems.filter(t => !t.done).length})
-        </h4>
-        <div>
-          <div>
-            <input value={this.state.newItemText} onChange={this.updateNewTextValue} />
-            <button onClick={this.createNewTodo}>Dodaj</button>
-          </div>
-          <table>
-            <thead>
-              <tr><th>Opis</th><th>Wykonane</th></tr>
-            </thead>
-            <tbody>{this.todoTableRows()}</tbody>
-          </table>
-        </div>
-        
+        <TodoBanner name={this.state.userName} tasks={this.state.todoItems} />
+      <div>
+        <TodoCreator callback={this.createNewTodo} />
+        <table>
+          <thead>
+            <tr><th>Opis</th><th>Wykonane</th></tr>
+          </thead>
+          <tbody>{this.todoTableRows()}</tbody>
+        </table>
       </div>
+    </div>
     )
   }
 }
