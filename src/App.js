@@ -56,26 +56,26 @@ export default class App extends Component {
     return (
       <div>
         <TodoBanner name={this.state.userName} tasks={this.state.todoItems} />
-      <div>
-        <TodoCreator callback={this.createNewTodo} />
-        <table>
-          <thead>
-            <tr><th>Opis</th><th>Wykonane</th></tr>
-          </thead>
-          <tbody>{this.todoTableRows(false)}</tbody>
-        </table>
-        <div>
-          <VisibilityControl description="Wykonane zadania" isChecked={this.state.showCompleted} callback={(checked) => this.setState({showCompleted: checked})} />
-        </div>
-        {this.state.showCompleted &&
-          <table>
+        <div className="container-fluid">
+          <TodoCreator callback={this.createNewTodo} />
+          <table className="table table-striped table-bordered">
             <thead>
               <tr><th>Opis</th><th>Wykonane</th></tr>
             </thead>
-            <tbody>{this.todoTableRows(true)}</tbody>
+            <tbody>{this.todoTableRows(false)}</tbody>
           </table>
-        }
-      </div>
+          <div className="bg-secondary text-white text-center p-2">
+            <VisibilityControl description="Wykonane zadania" isChecked={this.state.showCompleted} callback={(checked) => this.setState({showCompleted: checked})} />
+          </div>
+          {this.state.showCompleted &&
+            <table className="table table-striped table-bordered">
+              <thead>
+                <tr><th>Opis</th><th>Wykonane</th></tr>
+              </thead>
+              <tbody>{this.todoTableRows(true)}</tbody>
+            </table>
+          }
+        </div>
     </div>
     )
   }
